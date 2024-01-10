@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <title>Dashboard for the vehicle %id%</title>
+    <link rel="stylesheet" href="/css/vehicle_dashboard.css">
+</head>
+<body>
+    <h1>Dashboard for the vehicle %id%</h1>
+
+    <ul id="data">
+        <li id="id">ID: </li>
+        <li id="speed">Speed: </li>
+        <li id="status">
+            Status:
+            <ul id="statusList">
+                <li id="isConnected">Is connected: false</li>
+                <li id="onCharger">On charger: false</li>
+                <li id="loading">loading: false</li>
+                <li id="full">full: false</li>
+            </ul>
+        </li>
+        <li id="currentTrackPiece">currentTrackPiece: </li>
+        <li id="mapPosition">mapPosition: </li>
+        <li id="map">
+            Map:
+            <ol id="mapList">
+
+            </ol>
+        </li>
+        <li id="currentLane">currentLane: </li>
+        <li id="roadOffset">roadOffset: </li>
+    </ul>
+    <script src="/js/vehicle_dashboard.js"></script>
+</body>
