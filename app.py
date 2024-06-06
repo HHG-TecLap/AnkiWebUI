@@ -1,7 +1,6 @@
 from aiohttp import web
 import json
 import anki
-import time
 
 routes = web.RouteTableDef()
 vehicles: dict[int, anki.Vehicle] = {}
@@ -26,7 +25,7 @@ async def build_response(id: int):
     if vehicles[id].road_offset == ...: road_offset = None
     else: road_offset = vehicles[id].road_offset
 
-    if vehicles[id].current_lane4: current_lane = vehicles[id].current_lane4.lane_name
+    if vehicles[id].current_lane4: current_lane = vehicles[id].current_lane4.name
 
     res = {
         'id': vehicles[id].id,
@@ -65,6 +64,20 @@ async def edit_vehicle(id: int, jsonPayload) -> web.json_response:
 
         elif key == 'current_track_piece':
             return web.json_response({'error': 'You can\'t edit the current track piece'}, status=400)
+        
+        elif key == 'current_lane':
+            lane:str = jsonPayload[key]
+            lane = lane.upper()
+            if lane == 'LEFT_1':
+                await vehicles[id].change_lane(lane=anki.Lane4.LEFT_1)
+            elif lane == 'LEFT_2':
+                await vehicles[id].change_lane(lane=anki.Lane4.LEFT_2)
+            elif lane == 'RIGHT_1':
+                await vehicles[id].change_lane(lane=anki.Lane4.RIGHT_1)
+            elif lane == 'RIGHT_2':
+                await vehicles[id].change_lane(lane=anki.Lane4.RIGHT_2)
+            else:
+                return web.json_response({'error': 'Invalid lane name'}, status=400)
 
         else:
             pass
@@ -101,7 +114,7 @@ async def create_vehicle(request: web.Request):
     id = int(request.match_info['id'])
     if id in vehicles:
         return web.json_response(data={'error': f'The id {id} already exists'}, status=400)
-    vehicles[id] = await controller.connectOne(id)
+    vehicles[id] = await controller.connect_one(id)
     return await build_response(id)
 
 @routes.delete(r'/api/vehicle/{id:\d+}')
