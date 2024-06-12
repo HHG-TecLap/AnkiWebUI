@@ -42,7 +42,7 @@ async def build_response(id: int):
 async def edit_vehicle(id: int, jsonPayload) -> web.json_response:
     for key in jsonPayload:
         if key == 'speed':
-            await vehicles[id].setSpeed(speed=jsonPayload[key])
+            await vehicles[id].set_speed(speed=jsonPayload[key])
 
         elif key == 'is_connected':
             if jsonPayload[key] == True and vehicles[id].is_connected == False:
@@ -194,6 +194,17 @@ async def ws_handler(request: web.Request):
 
     return ws
 
+
+#font awesome handler
+@routes.get('/fontawesome/{folder}/{file}')
+async def  get_awesome(request: web.Request):
+    return web.Response(body="Awesome resource")
+
+@routes.get('/fontawesome/svgs/{type}/{file}')
+async def  get_awesome(request: web.Request):
+    return web.Response(body="Svgs")
+
+
 # file handler
 @routes.get('/{type}/{file}')
 async def get_file(request: web.Request):
@@ -218,6 +229,7 @@ async def get_file(request: web.Request):
     except:
         res = web.Response(status=500, text='An error occured')
     return res
+
 
 def app_factory() -> web.Application:
     app = web.Application()
